@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademi - School Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            border-right: 1px solid black;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .menu-item {
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            border: 1px solid black;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .header {
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid black;
+        }
+
+        .content-area {
+            padding: 20px;
+            min-height: 500px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">AKADEMI</div>
+            <nav>
+                <div class="menu-item" >Tin tức</div>
+                <div class="menu-item">Học sinh</div>
+                <div class="menu-item">Giáo viên</div>
+                <div class="menu-item">Lớp học</div>
+                <div class="menu-item">Điểm số</div>
+                <div class="menu-item">Cài đặt</div>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <header class="header">
+                <h1>School Management System</h1>
+            </header>
+            
+            <main class="content-area">
+                <h2>main event</h2>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
