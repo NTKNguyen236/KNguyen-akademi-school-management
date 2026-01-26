@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademi - School Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .login-container h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .login-container p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .role-selector {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .role-btn {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .role-btn:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .role-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .dashboard {
+            display: none;
+            background: #f5f5f5;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .dashboard.active {
+            display: block;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+        }
+        
+        .logout-btn {
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 68px;
+            width: 250px;
+            height: calc(100vh - 68px);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .menu-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background: #f8f9fa;
+            border-left-color: #667eea;
+        }
+        
+        .menu-item.active {
+            background: #f8f9fa;
+            border-left-color: #667eea;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            min-height: calc(100vh - 68px);
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .content-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .add-btn {
+            padding: 12px 24px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .add-btn:hover {
+            background: #229954;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .edit-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .view-btn {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginPage">
+        <h1>Akademi</h1>
+        <p>Hệ thống quản lý trường học</p>
+        
+        <div class="role-selector">
+            <button class="role-btn" onclick="selectRole('principal')">Hiệu trưởng</button>
+            <button class="role-btn" onclick="selectRole('teacher')">Giáo viên</button>
+            <button class="role-btn" onclick="selectRole('student')">Học sinh</button>
+        </div>
+        
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="Nhập email">
+        </div>
+        
+        <div class="form-group">
+            <label>Mật khẩu</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu">
+        </div>
+        
+        <button class="login-btn" onclick="login()">Đăng nhập</button>
+    </div>
+
+    <div class="dashboard" id="principalDashboard">
+        <div class="header">
+            <h1>Akademi - Principal Dashboard</h1>
+            <div>
+                <span style="margin-right: 20px;">Hiệu trưởng: NTK Nguyên</span>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="menu-item active" onclick="showSection('principal', 'overview')">Tổng quan</div>
+            <div class="menu-item" onclick="showSection('principal', 'students')">Quản lý học sinh</div>
+            <div class="menu-item" onclick="showSection('principal', 'teachers')">Quản lý giáo viên</div>
+            <div class="menu-item" onclick="showSection('principal', 'classes')">Quản lý lớp học</div>
+            <div class="menu-item" onclick="showSection('principal', 'schedule')">Quản lý thời khóa biểu</div>
+            <div class="menu-item" onclick="showSection('principal', 'activities')">Hoạt động ngoại khóa</div>
+            <div class="menu-item" onclick="showSection('principal', 'notifications')">Quản lý thông báo</div>
+            <div class="menu-item" onclick="showSection('principal', 'reports')">Báo cáo</div>
+            <div class="menu-item" onclick="showSection('principal', 'finance')">Quản lý tài chính</div>
+            <div class="menu-item" onclick="showSection('principal', 'assets')">Quản lý tài sản</div>
+            <div class="menu-item" onclick="showSection('principal', 'support')">Quản lý hỗ trợ</div>
+            <div class="menu-item" onclick="showSection('principal', 'staff')">Quản lý hồ sơ nhân viên</div>
+            <div class="menu-item" onclick="showSection('principal', 'tuition')">Quản lý học phí</div>
+            <div class="menu-item" onclick="showSection('principal', 'library')">Quản lý thư viện</div>
+            <div class="menu-item" onclick="showSection('principal', 'facility')">Quản lý cơ sở vật chất</div>
+            <div class="menu-item" onclick="showSection('principal', 'curriculum')">Quản lý chương trình học</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-section active" id="principal-overview">
+                <h2>Tổng quan</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Tổng số học sinh</h3>
+                        <div class="number">1000</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tổng số giáo viên</h3>
+                        <div class="number">67</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Số lớp học</h3>
+                        <div class="number">36</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Hoạt động ngoại khóa</h3>
+                        <div class="number">11</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section" id="principal-students">
+                <h2>Quản lý học sinh</h2>
+                <button class="add-btn">+ Thêm học sinh</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã số</th>
+                            <th>Họ tên</th>
+                            <th>Ngày sinh</th>
+                            <th>Lớp</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HS001</td>
+                            <td>muso</td>
+                            <td>15/03/2008</td>
+                            <td>10A1</td>
+                            <td>muso@email.com</td>
+                            <td>0901234567</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>HS002</td>
+                            <td>anthony</td>
+                            <td>20/05/2008</td>
+                            <td>10A2</td>
+                            <td>anthony@email.com</td>
+                            <td>0907654321</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-teachers">
+                <h2>Quản lý giáo viên</h2>
+                <button class="add-btn">+ Thêm giáo viên</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã số</th>
+                            <th>Họ tên</th>
+                            <th>Môn dạy</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Lớp chủ nhiệm</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>GV001</td>
+                            <td>Triển Đại Hiệp</td>
+                            <td>Toán</td>
+                            <td>triendaihiep@email.com</td>
+                            <td>0911111111</td>
+                            <td>10A1</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-classes">
+                <h2>Quản lý lớp học</h2>
+                <button class="add-btn">+ Tạo lớp học</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã lớp</th>
+                            <th>Tên lớp</th>
+                            <th>Khối</th>
+                            <th>Giáo viên chủ nhiệm</th>
+                            <th>Sĩ số</th>
+                            <th>Phòng học</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>12A12</td>
+                            <td>Lớp 12A12</td>
+                            <td>12</td>
+                            <td>Eternal</td>
+                            <td>44</td>
+                            <td>A101</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-schedule">
+                <h2>Quản lý thời khóa biểu</h2>
+                <button class="add-btn">+ Tạo thời khóa biểu</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Lớp</th>
+                            <th>Thứ 2</th>
+                            <th>Thứ 3</th>
+                            <th>Thứ 4</th>
+                            <th>Thứ 5</th>
+                            <th>Thứ 6</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10A1</td>
+                            <td>Toán, Văn</td>
+                            <td>Anh, Lý</td>
+                            <td>Hóa, Sinh</td>
+                            <td>Sử, Địa</td>
+                            <td>Thể dục, GDCD</td>
+                            <td>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-activities">
+                <h2>Quản lý hoạt động ngoại khóa</h2>
+                <button class="add-btn">+ Tạo hoạt động</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên hoạt động</th>
+                            <th>Ngày tổ chức</th>
+                            <th>Địa điểm</th>
+                            <th>Giáo viên phụ trách</th>
+                            <th>Số học sinh</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CLB Bóng đá</td>
+                            <td>Thứ 7 hàng tuần</td>
+                            <td>Sân trường</td>
+                            <td>Lucifer</td>
+                            <td>25</td>
+                            <td>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-notifications">
+                <h2>Quản lý thông báo</h2>
+                <button class="add-btn">+ Tạo thông báo</button>
+                <div class="form-group">
+                    <label>Tiêu đề thông báo</label>
+                    <input type="text" placeholder="Nhập tiêu đề">
+                </div>
+                <div class="form-group">
+                    <label>Nội dung</label>
+                    <textarea placeholder="Nhập nội dung thông báo"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Gửi đến</label>
+                    <select>
+                        <option>Tất cả</option>
+                        <option>Giáo viên</option>
+                        <option>Học sinh</option>
+                        <option>Lớp cụ thể</option>
+                    </select>
+                </div>
+                <button class="add-btn">Gửi thông báo</button>
+            </div>
+            
+            <div class="content-section" id="principal-reports">
+                <h2>Báo cáo</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Tỉ lệ đi học</h3>
+                        <div class="number">95%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Điểm trung bình</h3>
+                        <div class="number">7.8</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tỉ lệ tốt nghiệp</h3>
+                        <div class="number">98%</div>
+                    </div>
+                </div>
+                <button class="add-btn">Xuất báo cáo</button>
+            </div>
+            
+            <div class="content-section" id="principal-finance">
+                <h2>Quản lý tài chính</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Loại</th>
+                            <th>Nội dung</th>
+                            <th>Số tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>05/01/2026</td>
+                            <td>Thu</td>
+                            <td>Học phí học kỳ 1</td>
+                            <td>500,000,000 VNĐ</td>
+                            <td>Đã thu</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-assets">
+                <h2>Quản lý tài sản</h2>
+                <button class="add-btn">+ Thêm tài sản</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã tài sản</th>
+                            <th>Tên tài sản</th>
+                            <th>Loại</th>
+                            <th>Số lượng</th>
+                            <th>Tình trạng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TS001</td>
+                            <td>Máy chiếu</td>
+                            <td>Thiết bị giảng dạy</td>
+                            <td>15</td>
+                            <td>Tốt</td>
+                            <td>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-support">
+                <h2>Quản lý hỗ trợ</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã yêu cầu</th>
+                            <th>Người gửi</th>
+                            <th>Vai trò</th>
+                            <th>Nội dung</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>YC001</td>
+                            <td>muso</td>
+                            <td>Học sinh</td>
+                            <td>Không đăng nhập được</td>
+                            <td>Đang xử lý</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Xử lý</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-staff">
+                <h2>Quản lý hồ sơ nhân viên</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã NV</th>
+                            <th>Họ tên</th>
+                            <th>Chức vụ</th>
+                            <th>Ngày vào làm</th>
+                            <th>Hợp đồng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>NV001</td>
+                            <td>gemini</td>
+                            <td>Giáo viên</td>
+                            <td>01/09/2020</td>
+                            <td>Chính thức</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-tuition">
+                <h2>Quản lý học phí</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã HS</th>
+                            <th>Họ tên</th>
+                            <th>Lớp</th>
+                            <th>Học phí</th>
+                            <th>Đã đóng</th>
+                            <th>Còn nợ</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HS001</td>
+                            <td>muso</td>
+                            <td>10A1</td>
+                            <td>5,000,000</td>
+                            <td>5,000,000</td>
+                            <td>0</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-library">
+                <h2>Quản lý thư viện</h2>
+                <button class="add-btn">+ Thêm sách</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tác giả</th>
+                            <th>Thể loại</th>
+                            <th>Số lượng</th>
+                            <th>Đã mượn</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>S001</td>
+                            <td>Toán học 10</td>
+                            <td>Bộ GD&ĐT</td>
+                            <td>Sách giáo khoa</td>
+                            <td>100</td>
+                            <td>25</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-facility">
+                <h2>Quản lý cơ sở vật chất</h2>
+                <button class="add-btn">+ Thêm cơ sở vật chất</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã CSVC</th>
+                            <th>Tên</th>
+                            <th>Loại</th>
+                            <th>Tình trạng</th>
+                            <th>Bảo trì lần cuối</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CSVC001</td>
+                            <td>Phòng A101</td>
+                            <td>Phòng học</td>
+                            <td>Tốt</td>
+                            <td>15/12/2025</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="principal-curriculum">
+                <h2>Quản lý chương trình học</h2>
+                <button class="add-btn">+ Tạo chương trình học</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã CT</th>
+                            <th>Tên chương trình</th>
+                            <th>Khối</th>
+                            <th>Môn học</th>
+                            <th>Số tiết/tuần</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CT001</td>
+                            <td>Chương trình Toán lớp 10</td>
+                            <td>10</td>
+                            <td>Toán</td>
+                            <td>5</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard" id="teacherDashboard">
+        <div class="header">
+            <h1>Akademi - Teacher Dashboard</h1>
+            <div>
+                <span style="margin-right: 20px;">Giáo viên: Triển Đại Hiệp</span>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="menu-item active" onclick="showSection('teacher', 'overview')">Tổng quan</div>
+            <div class="menu-item" onclick="showSection('teacher', 'personal')">Thông tin cá nhân</div>
+            <div class="menu-item" onclick="showSection('teacher', 'students')">Quản lý học sinh</div>
+            <div class="menu-item" onclick="showSection('teacher', 'grades')">Quản lý điểm số</div>
+            <div class="menu-item" onclick="showSection('teacher', 'schedule')">Thời khóa biểu</div>
+            <div class="menu-item" onclick="showSection('teacher', 'materials')">Tài liệu giảng dạy</div>
+            <div class="menu-item" onclick="showSection('teacher', 'tests')">Quản lý bài kiểm tra</div>
+            <div class="menu-item" onclick="showSection('teacher', 'activities')">Hoạt động ngoại khóa</div>
+            <div class="menu-item" onclick="showSection('teacher', 'notifications')">Thông báo</div>
+            <div class="menu-item" onclick="showSection('teacher', 'support')">Hỗ trợ</div>
+            <div class="menu-item" onclick="showSection('teacher', 'assets')">Tài sản</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-section active" id="teacher-overview">
+                <h2>Tổng quan</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Số lớp phụ trách</h3>
+                        <div class="number">3</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tổng số học sinh</h3>
+                        <div class="number">120</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Bài kiểm tra</h3>
+                        <div class="number">8</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Điểm trung bình lớp</h3>
+                        <div class="number">7.9</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section" id="teacher-personal">
+                <h2>Thông tin cá nhân</h2>
+                <div class="form-group">
+                    <label>Họ tên</label>
+                    <input type="text" value="Triển Đại Hiệp">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" value="triendaihiep@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text" value="0911111111">
+                </div>
+                <div class="form-group">
+                    <label>Môn dạy</label>
+                    <input type="text" value="Toán">
+                </div>
+                <div class="form-group">
+                    <label>Lớp chủ nhiệm</label>
+                    <input type="text" value="10A1">
+                </div>
+                <button class="add-btn">Cập nhật thông tin</button>
+            </div>
+            
+            <div class="content-section" id="teacher-students">
+                <h2>Quản lý học sinh</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã số</th>
+                            <th>Họ tên</th>
+                            <th>Lớp</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HS001</td>
+                            <td>muso</td>
+                            <td>10A1</td>
+                            <td>muso@email.com</td>
+                            <td>0901234567</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>HS003</td>
+                            <td>dyycute</td>
+                            <td>10A1</td>
+                            <td>dyycute@email.com</td>
+                            <td>0909876543</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-grades">
+                <h2>Quản lý điểm số</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã HS</th>
+                            <th>Họ tên</th>
+                            <th>Lớp</th>
+                            <th>Điểm miệng</th>
+                            <th>Điểm 15p</th>
+                            <th>Điểm 1 tiết</th>
+                            <th>Điểm thi</th>
+                            <th>Trung bình</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HS001</td>
+                            <td>muso</td>
+                            <td>10A1</td>
+                            <td>8.5</td>
+                            <td>9.0</td>
+                            <td>8.0</td>
+                            <td>8.5</td>
+                            <td>8.5</td>
+                            <td>
+                                <button class="action-btn edit-btn">Nhập điểm</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>HS003</td>
+                            <td>dyycute</td>
+                            <td>10A1</td>
+                            <td>7.5</td>
+                            <td>8.0</td>
+                            <td>7.0</td>
+                            <td>7.5</td>
+                            <td>7.5</td>
+                            <td>
+                                <button class="action-btn edit-btn">Nhập điểm</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-schedule">
+                <h2>Thời khóa biểu</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tiết</th>
+                            <th>Thứ 2</th>
+                            <th>Thứ 3</th>
+                            <th>Thứ 4</th>
+                            <th>Thứ 5</th>
+                            <th>Thứ 6</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1-2</td>
+                            <td>10A1 - Toán</td>
+                            <td></td>
+                            <td>10A2 - Toán</td>
+                            <td></td>
+                            <td>10A1 - Toán</td>
+                        </tr>
+                        <tr>
+                            <td>3-4</td>
+                            <td></td>
+                            <td>10A3 - Toán</td>
+                            <td></td>
+                            <td>10A1 - Toán</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-materials">
+                <h2>Tài liệu giảng dạy</h2>
+                <button class="add-btn">+ Tải lên tài liệu</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên tài liệu</th>
+                            <th>Môn học</th>
+                            <th>Lớp</th>
+                            <th>Ngày tải</th>
+                            <th>Kích thước</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bài giảng Chương 1 - Hàm số</td>
+                            <td>Toán</td>
+                            <td>10A1</td>
+                            <td>15/01/2026</td>
+                            <td>2.5 MB</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-tests">
+                <h2>Quản lý bài kiểm tra</h2>
+                <button class="add-btn">+ Tạo bài kiểm tra</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên bài kiểm tra</th>
+                            <th>Lớp</th>
+                            <th>Loại</th>
+                            <th>Ngày thi</th>
+                            <th>Thời gian</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Kiểm tra 15 phút - Chương 1</td>
+                            <td>10A1</td>
+                            <td>15 phút</td>
+                            <td>20/01/2026</td>
+                            <td>15 phút</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                                <button class="action-btn delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-activities">
+                <h2>Hoạt động ngoại khóa</h2>
+                <button class="add-btn">+ Tạo hoạt động</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên hoạt động</th>
+                            <th>Ngày tổ chức</th>
+                            <th>Địa điểm</th>
+                            <th>Số học sinh</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CLB Toán học</td>
+                            <td>Thứ 6 hàng tuần</td>
+                            <td>Phòng A201</td>
+                            <td>15</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Sửa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-notifications">
+                <h2>Thông báo</h2>
+                <button class="add-btn">+ Gửi thông báo</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Nội dung</th>
+                            <th>Người nhận</th>
+                            <th>Ngày gửi</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Thông báo kiểm tra</td>
+                            <td>Kiểm tra 15 phút vào ngày 20/01/2026</td>
+                            <td>Lớp 10A1</td>
+                            <td>15/01/2026</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-support">
+                <h2>Hỗ trợ</h2>
+                <button class="add-btn">+ Gửi yêu cầu</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã yêu cầu</th>
+                            <th>Nội dung</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày gửi</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>YC002</td>
+                            <td>Yêu cầu cấp máy chiếu</td>
+                            <td>Đã xử lý</td>
+                            <td>10/01/2026</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="teacher-assets">
+                <h2>Tài sản được giao</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã tài sản</th>
+                            <th>Tên tài sản</th>
+                            <th>Loại</th>
+                            <th>Ngày nhận</th>
+                            <th>Tình trạng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TS001</td>
+                            <td>Máy chiếu</td>
+                            <td>Thiết bị giảng dạy</td>
+                            <td>01/09/2025</td>
+                            <td>Tốt</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard" id="studentDashboard">
+        <div class="header">
+            <h1>Akademi - Student Dashboard</h1>
+            <div>
+                <span style="margin-right: 20px;">Học sinh: muso</span>
+                <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="menu-item active" onclick="showSection('student', 'overview')">Tổng quan</div>
+            <div class="menu-item" onclick="showSection('student', 'personal')">Thông tin cá nhân</div>
+            <div class="menu-item" onclick="showSection('student', 'grades')">Kết quả học tập</div>
+            <div class="menu-item" onclick="showSection('student', 'schedule')">Thời khóa biểu</div>
+            <div class="menu-item" onclick="showSection('student', 'materials')">Tài liệu học tập</div>
+            <div class="menu-item" onclick="showSection('student', 'activities')">Hoạt động ngoại khóa</div>
+            <div class="menu-item" onclick="showSection('student', 'notifications')">Thông báo</div>
+            <div class="menu-item" onclick="showSection('student', 'support')">Hỗ trợ</div>
+            <div class="menu-item" onclick="showSection('student', 'tuition')">Học phí</div>
+            <div class="menu-item" onclick="showSection('student', 'library')">Thư viện</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="content-section active" id="student-overview">
+                <h2>Tổng quan</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Điểm trung bình</h3>
+                        <div class="number">8.5</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tỉ lệ đi học</h3>
+                        <div class="number">98%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Hoạt động tham gia</h3>
+                        <div class="number">3</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Sách đang mượn</h3>
+                        <div class="number">2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section" id="student-personal">
+                <h2>Thông tin cá nhân</h2>
+                <div class="form-group">
+                    <label>Họ tên</label>
+                    <input type="text" value="muso" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Mã số học sinh</label>
+                    <input type="text" value="HS001" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Ngày sinh</label>
+                    <input type="text" value="15/03/2008" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Lớp</label>
+                    <input type="text" value="10A1" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" value="muso@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text" value="0901234567">
+                </div>
+                <button class="add-btn">Cập nhật thông tin</button>
+            </div>
+            
+            <div class="content-section" id="student-grades">
+                <h2>Kết quả học tập</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Môn học</th>
+                            <th>Điểm miệng</th>
+                            <th>Điểm 15p</th>
+                            <th>Điểm 1 tiết</th>
+                            <th>Điểm thi</th>
+                            <th>Trung bình</th>
+                            <th>Xếp loại</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Toán</td>
+                            <td>8.5</td>
+                            <td>9.0</td>
+                            <td>8.0</td>
+                            <td>8.5</td>
+                            <td>8.5</td>
+                            <td>Giỏi</td>
+                        </tr>
+                        <tr>
+                            <td>Văn</td>
+                            <td>9.0</td>
+                            <td>8.5</td>
+                            <td>9.0</td>
+                            <td>8.5</td>
+                            <td>8.8</td>
+                            <td>Giỏi</td>
+                        </tr>
+                        <tr>
+                            <td>Anh</td>
+                            <td>8.0</td>
+                            <td>8.5</td>
+                            <td>8.0</td>
+                            <td>8.0</td>
+                            <td>8.1</td>
+                            <td>Giỏi</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="student-schedule">
+                <h2>Thời khóa biểu</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tiết</th>
+                            <th>Thứ 2</th>
+                            <th>Thứ 3</th>
+                            <th>Thứ 4</th>
+                            <th>Thứ 5</th>
+                            <th>Thứ 6</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1-2</td>
+                            <td>Toán<br>GV: Triển Đại Hiệp</td>
+                            <td>Anh<br>GV: Mr. Johnson</td>
+                            <td>Hóa<br>GV: Cô Mai</td>
+                            <td>Sử<br>GV: Thầy Tùng</td>
+                            <td>Thể dục<br>GV: Thầy Nam</td>
+                        </tr>
+                        <tr>
+                            <td>3-4</td>
+                            <td>Văn<br>GV: Nacrissister</td>
+                            <td>Lý<br>GV: Thầy Phong</td>
+                            <td>Sinh<br>GV: Cô Hoa</td>
+                            <td>Địa<br>GV: Cô Lan</td>
+                            <td>GDCD<br>GV: Cô Hương</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="student-materials">
+                <h2>Tài liệu học tập</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên tài liệu</th>
+                            <th>Môn học</th>
+                            <th>Giáo viên</th>
+                            <th>Ngày tải</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bài giảng Chương 1 - Hàm số</td>
+                            <td>Toán</td>
+                            <td>Triển Đại Hiệp</td>
+                            <td>15/01/2026</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Tải về</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Đề cương ôn tập giữa kỳ</td>
+                            <td>Văn</td>
+                            <td>Nacrissister</td>
+                            <td>18/01/2026</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                                <button class="action-btn edit-btn">Tải về</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="student-activities">
+                <h2>Hoạt động ngoại khóa</h2>
+                <button class="add-btn">+ Đăng ký hoạt động</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tên hoạt động</th>
+                            <th>Ngày tổ chức</th>
+                            <th>Địa điểm</th>
+                            <th>Giáo viên phụ trách</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CLB Bóng đá</td>
+                            <td>Thứ 7 hàng tuần</td>
+                            <td>Sân trường</td>
+                            <td>Lucifer</td>
+                            <td>Đã đăng ký</td>
+                            <td>
+                                <button class="action-btn delete-btn">Hủy đăng ký</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>CLB Văn học</td>
+                            <td>Thứ 6 hàng tuần</td>
+                            <td>Phòng A201</td>
+                            <td>Nacrissister</td>
+                            <td>Chưa đăng ký</td>
+                            <td>
+                                <button class="action-btn edit-btn">Đăng ký</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="student-notifications">
+                <h2>Thông báo</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Nội dung</th>
+                            <th>Người gửi</th>
+                            <th>Ngày gửi</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<tr>
+                            <td>Thông báo kiểm tra</td>
+                            <td>Kiểm tra 15 phút môn Toán vào ngày 20/01/2026</td>
+                            <td>Triển Đại Hiệp</td>
+                            <td>15/01/2026</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nghỉ học</td>
+                            <td>Thông báo nghỉ học ngày 25/01/2026 do bão</td>
+                            <td>NTK Nguyên</td>
+                            <td>20/01/2026</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="student-support">
+                <h2>Hỗ trợ</h2>
+                <button class="add-btn">+ Gửi yêu cầu hỗ trợ</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã yêu cầu</th>
+                            <th>Nội dung</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày gửi</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>YC001</td>
+                            <td>Không đăng nhập được</td>
+                            <td>Đang xử lý</td>
+                            <td>20/01/2026</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="student-tuition">
+                <h2>Quản lý học phí</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Tổng học phí</h3>
+                        <div class="number">10,000,000</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Đã thanh toán</h3>
+                        <div class="number">10,000,000</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Còn nợ</h3>
+                        <div class="number">0</div>
+                    </div>
+                </div>
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">Lịch sử thanh toán</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ngày thanh toán</th>
+                            <th>Nội dung</th>
+                            <th>Số tiền</th>
+                            <th>Phương thức</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>05/09/2025</td>
+                            <td>Học phí học kỳ 1 năm học 2025-2026</td>
+                            <td>5,000,000 VNĐ</td>
+                            <td>Chuyển khoản</td>
+                            <td>Đã thanh toán</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem hóa đơn</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>05/01/2026</td>
+                            <td>Học phí học kỳ 2 năm học 2025-2026</td>
+                            <td>5,000,000 VNĐ</td>
+                            <td>Chuyển khoản</td>
+                            <td>Đã thanh toán</td>
+                            <td>
+                                <button class="action-btn view-btn">Xem hóa đơn</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="content-section" id="student-library">
+                <h2>Thư viện</h2>
+                <div class="form-group">
+                    <label>Tìm kiếm sách</label>
+                    <input type="text" placeholder="Nhập tên sách, tác giả hoặc thể loại...">
+                </div>
+                <button class="add-btn">Tìm kiếm</button>
+                
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">Sách đang mượn</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tác giả</th>
+                            <th>Ngày mượn</th>
+                            <th>Hạn trả</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>S001</td>
+                            <td>Toán học 10</td>
+                            <td>Bộ GD&ĐT</td>
+                            <td>10/01/2026</td>
+                            <td>24/01/2026</td>
+                            <td>
+                                <button class="action-btn edit-btn">Gia hạn</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>S025</td>
+                            <td>Văn học Việt Nam</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>15/01/2026</td>
+                            <td>29/01/2026</td>
+                            <td>
+                                <button class="action-btn edit-btn">Gia hạn</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">Sách có sẵn</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã sách</th>
+                            <th>Tên sách</th>
+                            <th>Tác giả</th>
+                            <th>Thể loại</th>
+                            <th>Tình trạng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>S050</td>
+                            <td>Lịch sử Việt Nam</td>
+                            <td>Bộ GD&ĐT</td>
+                            <td>Sách giáo khoa</td>
+                            <td>Còn 25 cuốn</td>
+                            <td>
+                                <button class="action-btn edit-btn">Mượn sách</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>S075</td>
+                            <td>Khoa học tự nhiên</td>
+                            <td>NXB Giáo dục</td>
+                            <td>Tham khảo</td>
+                            <td>Còn 10 cuốn</td>
+                            <td>
+                                <button class="action-btn edit-btn">Mượn sách</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = '';
+        const accounts = {
+    principal: [
+        { email: 'NTKnguyen@akademi.edu.vn', password: 'admin123', name: 'NTK Nguyên' }
+    ],
+    teacher: [
+        { email: 'triendaihiep@akademi.edu.vn', password: 'teacher123', name: 'Triển Đại Hiệp' },
+        { email: 'nacrissister@akademi.edu.vn', password: 'teacher123', name: 'Nacrissister' },
+        { email: 'lucifer@akademi.edu.vn', password: 'teacher123', name: 'Lucifer' }
+    ],
+    student: [
+        { email: 'muso@akademi.edu.vn', password: 'student123', name: 'muso', studentId: 'HS001' },
+        { email: 'anthony@akademi.edu.vn', password: 'student123', name: 'anthony', studentId: 'HS002' },
+        { email: 'dyycute@akademi.edu.vn', password: 'student123', name: 'dyycute', studentId: 'HS003' }
+    ]
+};
+        
+        function selectRole(role) {
+            selectedRole = role;
+            const buttons = document.querySelectorAll('.role-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    if (!selectedRole) {
+        alert('Vui lòng chọn vai trò!');
+        return;
+    }
+    
+    if (!email || !password) {
+        alert('Vui lòng nhập đầy đủ thông tin!');
+        return;
+    }
+    
+    const user = accounts[selectedRole].find(acc => 
+        acc.email === email && acc.password === password
+    );
+    
+    if (!user) {
+        alert('Email hoặc mật khẩu không đúng!');
+        return;
+    }
+    
+    document.getElementById('loginPage').style.display = 'none';
+    
+    if (selectedRole === 'principal') {
+        document.getElementById('principalDashboard').classList.add('active');
+        document.querySelector('#principalDashboard .header span').textContent = `Hiệu trưởng: ${user.name}`;
+    } else if (selectedRole === 'teacher') {
+        document.getElementById('teacherDashboard').classList.add('active');
+        document.querySelector('#teacherDashboard .header span').textContent = `Giáo viên: ${user.name}`;
+    } else if (selectedRole === 'student') {
+        document.getElementById('studentDashboard').classList.add('active');
+        document.querySelector('#studentDashboard .header span').textContent = `Học sinh: ${user.name}`;
+    }
+}        
+        function logout() {
+            document.querySelectorAll('.dashboard').forEach(dash => {
+                dash.classList.remove('active');
+            });
+            
+            document.getElementById('loginPage').style.display = 'flex';
+            
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            selectedRole = '';
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+        }
+        
+        function showSection(role, section) {
+            const menuItems = document.querySelectorAll(`#${role}Dashboard .menu-item`);
+            menuItems.forEach(item => item.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            
+            const contentSections = document.querySelectorAll(`#${role}Dashboard .content-section`);
+            contentSections.forEach(sec => sec.classList.remove('active'));
+            
+            document.getElementById(`${role}-${section}`).classList.add('active');
+        }
+    </script>
